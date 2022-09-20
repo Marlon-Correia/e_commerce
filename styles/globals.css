@@ -465,6 +465,10 @@ span.text-red {
 .cart-heading .heading {
   margin-left: 10px;
 }
+.btn-disabled {
+  color: gray;
+  border: gray;
+}
 .cart-num-items {
   margin-left: 10px;
   color: #662986;

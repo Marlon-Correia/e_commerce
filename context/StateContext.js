@@ -17,9 +17,7 @@ export const StateContext = ({ children }) => {
   }, []);
 
   const getItems = async () => {
-    const req = await axios.get(
-      "https://gxabqs5gsj.execute-api.us-east-1.amazonaws.com/dev_v3/jerseys"
-    );
+    const req = await axios.get(process.env.NEXT_PUBLIC_AMAZON_JERSEYS);
     setCartItems(req.data.body);
     let priceN = 0;
     req.data.body.map((item) => {
@@ -44,18 +42,15 @@ export const StateContext = ({ children }) => {
             "https://cdn.sanity.io/images/wyt08z5i/production/"
           )
           .replace("-jpg", ".jpg");
-        await axios.post(
-          "https://gxabqs5gsj.execute-api.us-east-1.amazonaws.com/dev_v3/jersey",
-          {
-            modelId: product._id,
-            name: product.name,
-            url: newImg,
-            price: product.price,
-            quantity: quantity,
-            size: sizeJersey,
-            slug: product.slug.current,
-          }
-        );
+        await axios.post(process.env.NEXT_PUBLIC_AMAZON_JERSEY, {
+          modelId: product._id,
+          name: product.name,
+          url: newImg,
+          price: product.price,
+          quantity: quantity,
+          size: sizeJersey,
+          slug: product.slug.current,
+        });
         toast.success(`${qty} ${product.name} foram adicionados ao carrinho!`);
       }
       getItems();
@@ -69,13 +64,10 @@ export const StateContext = ({ children }) => {
     setLoading(true);
     const newQuantity =
       payload === true ? item.quantity + quantity : item.quantity - quantity;
-    await axios.patch(
-      "https://gxabqs5gsj.execute-api.us-east-1.amazonaws.com/dev_v3/jersey",
-      {
-        newQt: newQuantity,
-        product: item,
-      }
-    );
+    await axios.patch(process.env.NEXT_PUBLIC_AMAZON_JERSEY, {
+      newQt: newQuantity,
+      product: item,
+    });
     const message =
       payload === true
         ? `${quantity} ${item.name} foram adicionados ao carrinho!`
@@ -87,14 +79,11 @@ export const StateContext = ({ children }) => {
 
   const removeItem = async (item) => {
     setLoading(true);
-    await axios.delete(
-      "https://gxabqs5gsj.execute-api.us-east-1.amazonaws.com/dev_v3/jersey",
-      {
-        data: {
-          productId: item.productId,
-        },
-      }
-    );
+    await axios.delete(process.env.NEXT_PUBLIC_AMAZON_JERSEY, {
+      data: {
+        productId: item.productId,
+      },
+    });
     getItems();
     setLoading(false);
   };
